@@ -271,9 +271,14 @@ function animate() {
 
 animate()
 
+document.querySelector('#beginButton').addEventListener('click', () => {
+  document.querySelector('#beginButton').style.display = 'none'
+  document.querySelector('#tutorial').style.display = 'flex'
+})
+
 document.querySelector('#startButton').addEventListener('click', () => {
   decreaseTimer()
-  document.querySelector('#startButton').style.display = 'none'
+  document.querySelector('#tutorial').style.display = 'none'
   game.started = true
 })
 
