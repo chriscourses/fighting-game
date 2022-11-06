@@ -147,8 +147,6 @@ const enemy = new Fighter({
   }
 })
 
-console.log(player)
-
 const keys = {
   a: {
     pressed: false
@@ -164,7 +162,9 @@ const keys = {
   }
 }
 
-decreaseTimer()
+const game = {
+  started: false
+}
 
 function animate() {
   window.requestAnimationFrame(animate)
@@ -174,6 +174,8 @@ function animate() {
   shop.update()
   c.fillStyle = 'rgba(255, 255, 255, 0.15)'
   c.fillRect(0, 0, canvas.width, canvas.height)
+
+  if (!game.started) return
   player.update()
   enemy.update()
 
@@ -268,6 +270,12 @@ function animate() {
 }
 
 animate()
+
+document.querySelector('#startButton').addEventListener('click', () => {
+  decreaseTimer()
+  document.querySelector('#startButton').style.display = 'none'
+  game.started = true
+})
 
 window.addEventListener('keydown', (event) => {
   if (!player.dead) {
