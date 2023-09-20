@@ -1,2 +1,3 @@
 # fighting_game
-this a samurai game
+this a samurai game and multiplayer game
+
