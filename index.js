@@ -166,6 +166,8 @@ const keys = {
 
 decreaseTimer()
 
+let enemyHasJumped = false;
+
 function animate() {
   window.requestAnimationFrame(animate)
   c.fillStyle = 'black'
@@ -179,6 +181,7 @@ function animate() {
 
   player.velocity.x = 0
   enemy.velocity.x = 0
+
 
   // player movement
 
@@ -210,12 +213,15 @@ function animate() {
     enemy.switchSprite('idle')
   }
 
+
   // jumping
-  if (enemy.velocity.y < 0) {
-    enemy.switchSprite('jump')
-  } else if (enemy.velocity.y > 0) {
-    enemy.switchSprite('fall')
-  }
+  // if (enemy.velocity.y < 0 && !enemyHasJumped) {
+  //   enemy.switchSprite('jump');
+  //   enemyHasJumped = true; 
+  // } else if (enemy.velocity.y > 0) {
+  //   enemy.switchSprite('fall');
+  //   enemyHasJumped = false; 
+  // }
 
   // detect for collision & enemy gets hit
   if (
@@ -269,6 +275,13 @@ function animate() {
 
 animate()
 
+// delay between jumps
+let jumpCooldown = false; 
+
+// Delay time in milliseconds 
+const jumpCooldownTime = 1000; 
+
+
 window.addEventListener('keydown', (event) => {
   if (!player.dead) {
     switch (event.key) {
@@ -281,7 +294,15 @@ window.addEventListener('keydown', (event) => {
         player.lastKey = 'a'
         break
       case 'w':
-        player.velocity.y = -20
+        // Check if the character is not in a cooldown state
+        if (!jumpCooldown) { 
+          player.velocity.y = -20
+          jumpCooldown = true;
+          setTimeout(() => {
+            // After the specified time, disable the cooldown
+            jumpCooldown = false; 
+          }, jumpCooldownTime);
+        }
         break
       case ' ':
         player.attack()
