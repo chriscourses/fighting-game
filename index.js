@@ -47,34 +47,13 @@ const player = new Fighter({
     y: 157
   },
   sprites: {
-    idle: {
-      imageSrc: './img/samuraiMack/Idle.png',
-      framesMax: 8
-    },
-    run: {
-      imageSrc: './img/samuraiMack/Run.png',
-      framesMax: 8
-    },
-    jump: {
-      imageSrc: './img/samuraiMack/Jump.png',
-      framesMax: 2
-    },
-    fall: {
-      imageSrc: './img/samuraiMack/Fall.png',
-      framesMax: 2
-    },
-    attack1: {
-      imageSrc: './img/samuraiMack/Attack1.png',
-      framesMax: 6
-    },
-    takeHit: {
-      imageSrc: './img/samuraiMack/Take Hit - white silhouette.png',
-      framesMax: 4
-    },
-    death: {
-      imageSrc: './img/samuraiMack/Death.png',
-      framesMax: 6
-    }
+    idle:    { imageSrc: './img/samuraiMack/Idle.png', framesMax: 8 },
+    run:     { imageSrc: './img/samuraiMack/Run.png', framesMax: 8 },
+    jump:    { imageSrc: './img/samuraiMack/Jump.png', framesMax: 2 },
+    fall:    { imageSrc: './img/samuraiMack/Fall.png', framesMax: 2 },
+    attack1: { imageSrc: './img/samuraiMack/Attack1.png', framesMax: 6 },
+    takeHit: { imageSrc: './img/samuraiMack/Take Hit - white silhouette.png', framesMax: 4 },
+    death:   { imageSrc: './img/samuraiMack/Death.png', framesMax: 6 }
   },
   attackBox: {
     offset: {
@@ -108,34 +87,13 @@ const enemy = new Fighter({
     y: 167
   },
   sprites: {
-    idle: {
-      imageSrc: './img/kenji/Idle.png',
-      framesMax: 4
-    },
-    run: {
-      imageSrc: './img/kenji/Run.png',
-      framesMax: 8
-    },
-    jump: {
-      imageSrc: './img/kenji/Jump.png',
-      framesMax: 2
-    },
-    fall: {
-      imageSrc: './img/kenji/Fall.png',
-      framesMax: 2
-    },
-    attack1: {
-      imageSrc: './img/kenji/Attack1.png',
-      framesMax: 4
-    },
-    takeHit: {
-      imageSrc: './img/kenji/Take hit.png',
-      framesMax: 3
-    },
-    death: {
-      imageSrc: './img/kenji/Death.png',
-      framesMax: 7
-    }
+    idle:    { imageSrc: './img/kenji/Idle.png', framesMax: 4 },
+    run:     { imageSrc: './img/kenji/Run.png', framesMax: 8 },
+    jump:    { imageSrc: './img/kenji/Jump.png', framesMax: 2 },
+    fall:    { imageSrc: './img/kenji/Fall.png', framesMax: 2 },
+    attack1: { imageSrc: './img/kenji/Attack1.png', framesMax: 4 },
+    takeHit: { imageSrc: './img/kenji/Take hit.png', framesMax: 3 },
+    death:   { imageSrc: './img/kenji/Death.png', framesMax: 7 }
   },
   attackBox: {
     offset: {
@@ -185,33 +143,43 @@ function animate() {
 
   // player movement
 
-  if (keys.a.pressed && player.lastKey === 'a') {
-    player.velocity.x = -5
-    player.switchSprite('run')
-  } else if (keys.d.pressed && player.lastKey === 'd') {
-    player.velocity.x = 5
-    player.switchSprite('run')
-  } else {
-    player.switchSprite('idle')
+// Player movement
+if (keys.a.pressed && player.lastKey === 'a') {
+  if (player.position.x > 0) { // Check left boundary
+    player.velocity.x = -5;
+    player.switchSprite('run');
   }
+} else if (keys.d.pressed && player.lastKey === 'd') {
+  if (player.position.x < canvas.width - player.width) { // Check right boundary
+    player.velocity.x = 5;
+    player.switchSprite('run');
+  }
+} else {
+  player.switchSprite('idle');
+}
 
-  // jumping
-  if (player.velocity.y < 0) {
-    player.switchSprite('jump')
-  } else if (player.velocity.y > 0) {
-    player.switchSprite('fall')
-  }
+// Jumping
+if (player.velocity.y < 0) {
+  player.switchSprite('jump');
+} else if (player.velocity.y > 0) {
+  player.switchSprite('fall');
+}
 
-  // Enemy movement
-  if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-    enemy.velocity.x = -5
-    enemy.switchSprite('run')
-  } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-    enemy.velocity.x = 5
-    enemy.switchSprite('run')
-  } else {
-    enemy.switchSprite('idle')
+// Enemy movement
+if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
+  if (enemy.position.x > 0) { // Check left boundary
+    enemy.velocity.x = -5;
+    enemy.switchSprite('run');
   }
+} else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
+  if (enemy.position.x < canvas.width - enemy.width) { // Check right boundary
+    enemy.velocity.x = 5;
+    enemy.switchSprite('run');
+  }
+} else {
+  enemy.switchSprite('idle');
+}
+
 
 
   // jumping
