@@ -141,6 +141,15 @@ function animate() {
   enemy.velocity.x = 0
 
 
+  let playerOneScore = localStorage.getItem('playerOneScore');
+  if (playerOneScore !== null) {
+    document.querySelector('#playerOneScore').innerText = playerOneScore;
+  }
+  let playerTwoScore = localStorage.getItem('playerTwoScore');
+  if (playerTwoScore !== null) {
+    document.querySelector('#playerTwoScore').innerText = playerTwoScore;
+  }
+
   // player movement
 
 // Player movement

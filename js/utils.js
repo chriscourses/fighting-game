@@ -15,11 +15,27 @@ function determineWinner({ player, enemy, timerId }) {
   document.querySelector('#displayText').style.display = 'flex'
   if (player.health === enemy.health) {
     document.querySelector('#displayText').innerHTML = 'Tie'
-  } else if (player.health > enemy.health) {
+  } 
+  else if (player.health > enemy.health) {
     document.querySelector('#displayText').innerHTML = 'Player 1 Wins'
-  } else if (player.health < enemy.health) {
+
+    let playerOneScoreElement = document.querySelector('#playerOneScore');
+    let playerOneScore = parseInt(playerOneScoreElement.innerText);
+    playerOneScore++;
+    playerOneScoreElement.innerText = playerOneScore;
+    localStorage.setItem('playerOneScore', playerOneScore.toString());
+  } 
+  else if (player.health < enemy.health) {
     document.querySelector('#displayText').innerHTML = 'Player 2 Wins'
+    
+   let playerTwoScoreElement = document.querySelector('#playerTwoScore');
+    let playerTwoScore = parseInt(playerTwoScoreElement.innerText);
+    playerTwoScore++;
+    playerTwoScoreElement.innerText = playerTwoScore;
+    localStorage.setItem('playerTwoScore', playerTwoScore.toString());
   }
+
+  window.location.reload();
 }
 
 let timer = 60
