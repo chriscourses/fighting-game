@@ -147,8 +147,6 @@ const enemy = new Fighter({
   }
 })
 
-console.log(player)
-
 const keys = {
   a: {
     pressed: false
