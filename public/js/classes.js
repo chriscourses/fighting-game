@@ -125,6 +125,10 @@ class Fighter extends Sprite {
     } else this.velocity.y += gravity
   }
 
+  jump() {
+    this.velocity.y = -20
+  }
+
   attack() {
     this.switchSprite('attack1')
     this.isAttacking = true

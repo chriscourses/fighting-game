@@ -281,7 +281,7 @@ window.addEventListener('keydown', (event) => {
         player.lastKey = 'a'
         break
       case 'w':
-        player.velocity.y = -20
+        player.jump()
         break
       case ' ':
         player.attack()
@@ -300,7 +300,7 @@ window.addEventListener('keydown', (event) => {
         enemy.lastKey = 'ArrowLeft'
         break
       case 'ArrowUp':
-        enemy.velocity.y = -20
+        enemy.jump()
         break
       case 'ArrowDown':
         enemy.attack()
