@@ -85,6 +85,7 @@ class Fighter extends Sprite {
       height: attackBox.height
     }
     this.color = color
+    this.isJumping = false
     this.isAttacking
     this.health = 100
     this.framesCurrent = 0
@@ -122,11 +123,18 @@ class Fighter extends Sprite {
     if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
       this.velocity.y = 0
       this.position.y = 330
-    } else this.velocity.y += gravity
+      this.isJumping = false
+    } else {
+      this.velocity.y += gravity
+      this.isJumping = true
+    }
   }
 
   jump() {
-    this.velocity.y = -20
+    if (!this.isJumping) {
+      this.velocity.y = -20
+      this.isJumping = true
+    }
   }
 
   attack() {
