@@ -14,8 +14,8 @@ class Sprite {
     this.scale = scale
     this.framesMax = framesMax
     this.framesCurrent = 0
-    this.framesElapsed = 0
-    this.framesHold = 5
+    this.elapsedTime = 0
+    this.secondsInterval = 1 / 16
     this.offset = offset
   }
 
@@ -33,21 +33,23 @@ class Sprite {
     )
   }
 
-  animateFrames() {
-    this.framesElapsed++
+  animateFrames(deltaTime) {
+    if (!deltaTime) return
 
-    if (this.framesElapsed % this.framesHold === 0) {
+    this.elapsedTime += deltaTime
+    if (this.elapsedTime > this.secondsInterval) {
       if (this.framesCurrent < this.framesMax - 1) {
         this.framesCurrent++
       } else {
         this.framesCurrent = 0
       }
+      this.elapsedTime -= this.secondsInterval
     }
   }
 
-  update() {
+  update(deltaTime) {
     this.draw()
-    this.animateFrames()
+    this.animateFrames(deltaTime)
   }
 }
 
@@ -88,8 +90,7 @@ class Fighter extends Sprite {
     this.isAttacking
     this.health = 100
     this.framesCurrent = 0
-    this.framesElapsed = 0
-    this.framesHold = 5
+    this.elapsedTime = 0
     this.sprites = sprites
     this.dead = false
 
@@ -99,9 +100,11 @@ class Fighter extends Sprite {
     }
   }
 
-  update() {
+  update(deltaTime) {
     this.draw()
-    if (!this.dead) this.animateFrames()
+    if (!deltaTime) return
+
+    if (!this.dead) this.animateFrames(deltaTime)
 
     // attack boxes
     this.attackBox.position.x = this.position.x + this.attackBox.offset.x
@@ -115,14 +118,17 @@ class Fighter extends Sprite {
     //   this.attackBox.height
     // )
 
-    this.position.x += this.velocity.x
-    this.position.y += this.velocity.y
+    this.position.x += this.velocity.x * deltaTime
+    this.position.y += this.velocity.y * deltaTime
 
     // gravity function
-    if (this.position.y + this.height + this.velocity.y >= canvas.height - 96) {
+    if (
+      this.position.y + this.height + this.velocity.y * deltaTime >=
+      canvas.height - 96
+    ) {
       this.velocity.y = 0
       this.position.y = 330
-    } else this.velocity.y += gravity
+    } else this.velocity.y += GRAVITY * deltaTime
   }
 
   attack() {

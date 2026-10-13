@@ -6,7 +6,9 @@ canvas.height = 576
 
 c.fillRect(0, 0, canvas.width, canvas.height)
 
-const gravity = 0.7
+const GRAVITY = 2520
+const X_VELOCITY = 400
+const JUMP_POWER = 1200
 
 const background = new Sprite({
   position: {
@@ -166,16 +168,22 @@ const keys = {
 
 decreaseTimer()
 
+let lastTime = performance.now()
 function animate() {
   window.requestAnimationFrame(animate)
+
+  const currentTime = performance.now()
+  const deltaTime = Math.min((currentTime - lastTime) / 1000, 0.1)
+  lastTime = currentTime
+
   c.fillStyle = 'black'
   c.fillRect(0, 0, canvas.width, canvas.height)
-  background.update()
-  shop.update()
+  background.update(deltaTime)
+  shop.update(deltaTime)
   c.fillStyle = 'rgba(255, 255, 255, 0.15)'
   c.fillRect(0, 0, canvas.width, canvas.height)
-  player.update()
-  enemy.update()
+  player.update(deltaTime)
+  enemy.update(deltaTime)
 
   player.velocity.x = 0
   enemy.velocity.x = 0
@@ -183,10 +191,10 @@ function animate() {
   // player movement
 
   if (keys.a.pressed && player.lastKey === 'a') {
-    player.velocity.x = -5
+    player.velocity.x = -X_VELOCITY
     player.switchSprite('run')
   } else if (keys.d.pressed && player.lastKey === 'd') {
-    player.velocity.x = 5
+    player.velocity.x = X_VELOCITY
     player.switchSprite('run')
   } else {
     player.switchSprite('idle')
@@ -201,10 +209,10 @@ function animate() {
 
   // Enemy movement
   if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
-    enemy.velocity.x = -5
+    enemy.velocity.x = -X_VELOCITY
     enemy.switchSprite('run')
   } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight') {
-    enemy.velocity.x = 5
+    enemy.velocity.x = X_VELOCITY
     enemy.switchSprite('run')
   } else {
     enemy.switchSprite('idle')
@@ -270,6 +278,9 @@ function animate() {
 animate()
 
 window.addEventListener('keydown', (event) => {
+  if (event.key === 'ArrowDown' || event.key === 'ArrowUp')
+    event.preventDefault()
+
   if (!player.dead) {
     switch (event.key) {
       case 'd':
@@ -281,7 +292,7 @@ window.addEventListener('keydown', (event) => {
         player.lastKey = 'a'
         break
       case 'w':
-        player.velocity.y = -20
+        player.velocity.y = -JUMP_POWER
         break
       case ' ':
         player.attack()
@@ -300,7 +311,7 @@ window.addEventListener('keydown', (event) => {
         enemy.lastKey = 'ArrowLeft'
         break
       case 'ArrowUp':
-        enemy.velocity.y = -20
+        enemy.velocity.y = -JUMP_POWER
         break
       case 'ArrowDown':
         enemy.attack()
